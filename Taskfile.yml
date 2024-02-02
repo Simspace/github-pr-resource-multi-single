@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 vars:
   BUILD_DIR: build
@@ -10,7 +10,7 @@ tasks:
       - task: test
 
   generate:
-    desc: Generate test fakes
+    description: Generate test fakes
     cmds:
     - go generate ./...
     sources:
@@ -21,7 +21,7 @@ tasks:
     method: checksum
 
   test:
-    desc: Run test suite
+    description: Run test suite
     deps: [generate]
     cmds:
     - gofmt -s -l -w .
@@ -29,18 +29,18 @@ tasks:
     - go test -race -v ./...
 
   e2e:
-    desc: Run E2E test suite
+    description: Run E2E test suite
     cmds:
     - task: test
     - go test -race -v ./... -tags=e2e
 
   docker:
-    desc: Build docker image under dev tag.
+    description: Build docker image under dev tag.
     cmds:
     - docker build -t {{.DOCKER_REPO}}:dev .
 
   build:
-    desc: Build check/in/out artifacts
+    description: Build check/in/out artifacts
     cmds:
     # - task: test
     - task: go-build
@@ -59,7 +59,7 @@ tasks:
       GOARCH: '{{ARCH}}'
 
   ci:
-    desc: CI build and tests
+    description: CI build and tests
     cmds:
     - task: build
     - if [ -n "$(git status --porcelain)" ];then echo "Diff in generated files and/or formatting" && exit 1; fi
